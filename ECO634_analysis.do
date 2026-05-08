@@ -260,6 +260,7 @@ graph export "Analysis\graph_2_xtline_fd_all.png", replace width(1600)
 preserve
 estpost tabstat own_tax_share non_tax_share cent_tax_share cent_grant_share, by(year) statistics(mean) columns(statistics) listwise
 esttab . using "Analysis\revenue_shares.tex", replace cells("mean(fmt(2))") label booktabs nonumbers title("Mean Revenue Shares by Year") addnotes("Source: PRS India & RBI")
+esttab . using "Analysis\revenue_shares.rtf", replace cells("mean(fmt(2))") label nonumbers title("Mean Revenue Shares by Year") addnotes("Source: PRS India & RBI")
 restore
 
 preserve
@@ -305,8 +306,12 @@ restore
 ** Analysis on Expenditure and Revenue-Capital Mix
 xtsum capex_share_total_exp
 estpost summarize capex_share_total_exp, detail
+
 esttab . using "Analysis\capex_share_total_exp_table_1.tex", replace cells("mean(fmt(2)) sd(fmt(2)) min(fmt(2)) max(fmt(2))") label booktabs nonumbers title("Summary Statistics: Capex Share") addnotes("Note: Results show overall distribution.")
+esttab . using "Analysis\capex_share_total_exp_table_1.rtf", replace cells("mean(fmt(2)) sd(fmt(2)) min(fmt(2)) max(fmt(2))") label nonumbers title("Summary Statistics: Capex Share") addnotes("Note: Results show overall distribution.")
+
 outreg2 using "Analysis\capex_share_total_exp_table_2.tex", replace sum(log) eqkeep(N mean sd min max) title(Summary Statistics) tex
+outreg2 using "Analysis\capex_share_total_exp_table_2.rtf", replace sum(log) eqkeep(N mean sd min max) title(Summary Statistics) word
 
 xtreg capex_share_total_exp i.year, fe vce(robust)
 estadd local statefe "Yes"
@@ -383,7 +388,6 @@ local c3 "forest_green"
 local c4 "purple"
 local c5 "orange"
 
-* 2. The full graph block
 twoway ///
     (connected fiscal_deficit_pct_gsdp year if state_name=="maharashtra", ///
         lcolor(`c1') mcolor(`c1') msymbol(circle) lwidth(medthick)) ///
@@ -406,6 +410,4 @@ twoway ///
                  4 "West Bengal" 5 "Rajasthan") ///
            position(6) rows(2) size(small)) ///
     note("Source: PRS India & RBI Handbook of Indian Statistics", size(vsmall))
-
-* 3. Export
 graph export "Analysis\graph_6_fiscal_deficit_states.png", replace width(1600)
